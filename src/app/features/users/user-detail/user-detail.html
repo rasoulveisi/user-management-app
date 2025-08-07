@@ -1,1 +1,75 @@
-<p>user-detail works!</p>
+<div class="max-w-2xl mx-auto p-6">
+  <button 
+    (click)="onBackToList()"
+    class="text-blue-500 hover:text-blue-600 mb-6">
+    ← Back to Users
+  </button>
+
+  @if (loading) {
+    <div class="text-center py-8">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <p class="mt-2 text-gray-600">Loading...</p>
+    </div>
+  }
+
+  @if (error && !loading) {
+    <div class="text-center py-8">
+      <p class="text-red-600 mb-4">{{ error }}</p>
+      <button 
+        (click)="onRetry()"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Try Again
+      </button>
+    </div>
+  }
+
+  @if ((user$ | async) && !loading && !error) {
+    <div class="bg-white border border-gray-200 rounded-lg p-6">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">{{ (user$ | async)!.name }}</h1>
+        <p class="text-gray-600">{{ (user$ | async)!.username }}</p>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div>
+          <span class="text-sm text-gray-500">Email</span>
+          <p class="text-gray-900">
+            <button 
+              class="text-blue-500 hover:text-blue-600">
+              {{ (user$ | async)!.email }}
+            </button>
+          </p>
+        </div>
+        
+        <div>
+          <span class="text-sm text-gray-500">Phone</span>
+          <p class="text-gray-900">{{ (user$ | async)!.phone }}</p>
+        </div>
+        
+        <div>
+          <span class="text-sm text-gray-500">Website</span>
+          <p class="text-gray-900">
+            <button 
+              class="text-gray-600">
+              {{ (user$ | async)!.website }} ↗
+            </button>
+          </p>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Address</h3>
+        <div class="text-gray-600">
+          <p>{{ (user$ | async)!.address.street }}, {{ (user$ | async)!.address.suite }}</p>
+          <p>{{ (user$ | async)!.address.city }} {{ (user$ | async)!.address.zipcode }}</p>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Company</h3>
+        <p class="font-medium text-gray-900">{{ (user$ | async)!.company.name }}</p>
+        <p class="text-sm text-gray-600 italic">{{ (user$ | async)!.company.catchPhrase }}</p>
+      </div>
+    </div>
+  }
+</div>

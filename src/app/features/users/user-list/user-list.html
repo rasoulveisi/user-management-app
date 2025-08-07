@@ -1,1 +1,58 @@
-<p>user-list works!</p>
+<div class="max-w-4xl mx-auto p-6">
+  <div class="mb-6">
+    <input 
+      [formControl]="searchControl"
+      placeholder="Search users..."
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    @if (searchTerm()) {
+      <p class="text-sm text-gray-500 mt-2">{{ filteredUsers().length }} of {{ (users$ | async)?.length || 0 }} users</p>
+    }
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-8">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <p class="mt-2 text-gray-600">Loading...</p>
+    </div>
+  }
+
+  @if (error && !loading) {
+    <div class="text-center py-8">
+      <p class="text-red-600 mb-4">{{ error }}</p>
+      <button 
+        (click)="onRetry()"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Try Again
+      </button>
+    </div>
+  }
+
+  @if (!loading && !error && filteredUsers().length > 0) {
+    <div class="space-y-2">
+      @for (user of filteredUsers(); track user.id) {
+        <div 
+          class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors" 
+          (click)="onUserClick(user.id)">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-medium text-gray-900">{{ user.name }}</h3>
+              <p class="text-sm text-gray-600">{{ user.email }}</p>
+            </div>
+            <div class="text-gray-400">→</div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading && !error && filteredUsers().length === 0 && ((users$ | async)?.length || 0) > 0) {
+    <div class="text-center py-8">
+      <p class="text-gray-500">No users found</p>
+      <button 
+        (click)="onClearSearch()" 
+        class="mt-2 text-blue-500 hover:text-blue-600">
+        Clear search
+      </button>
+    </div>
+  }
+</div>
