@@ -8,11 +8,11 @@ export const routes: Routes = [
   },
   {
     path: 'users',
-    loadComponent: () => import('./features/users/user-list/user-list').then(m => m.UserListComponent)
+    loadComponent: () => import('./features/users/user-list/user-list').then(m => m.UserList)
   },
   {
     path: 'users/:id',
-    loadComponent: () => import('./features/users/user-detail/user-detail').then(m => m.UserDetailComponent)
+    loadComponent: () => import('./features/users/user-detail/user-detail').then(m => m.UserDetail)
   },
   {
     path: '**',
